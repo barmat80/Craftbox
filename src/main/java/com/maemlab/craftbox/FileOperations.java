@@ -48,7 +48,7 @@ public class FileOperations {
 	 *
 	 * @param file the path of the file
 	 * @return a List of String representing the lines of the file
-	 * @throws IOException
+	 * @throws IOException if an I/O error occurs reading from the file or a malformed or unmappable byte sequence is read
 	 */
 	public static List<String> readSmallTextFileToList(String file) throws IOException {
 		return readSmallTextFileToList(file, StandardCharsets.UTF_8);
@@ -59,7 +59,7 @@ public class FileOperations {
 	 *
 	 * @param file the URL of the file
 	 * @return a List of String representing the lines of the file
-	 * @throws IOException
+	 * @throws IOException if an I/O error occurs reading from the file or a malformed or unmappable byte sequence is read
 	 */
 	public static List<String> readSmallTextFileToList(URL file) throws IOException {
 		return readSmallTextFileToList(file.getPath().substring(1));
@@ -71,7 +71,7 @@ public class FileOperations {
 	 * @param file the path of the file
 	 * @param encoding the encoding of the file
 	 * @return a List of String representing the lines of the file
-	 * @throws IOException
+	 * @throws IOException if an I/O error occurs reading from the file or a malformed or unmappable byte sequence is read
 	 */
 	public static List<String> readSmallTextFileToList(String file, Charset encoding) throws IOException {
 		Path path = Paths.get(file);
@@ -83,7 +83,7 @@ public class FileOperations {
 	 *
 	 * @param file the path of the file
 	 * @return a String representing all the lines of the file
-	 * @throws IOException
+	 * @throws IOException if an I/O error occurs reading from the file or a malformed or unmappable byte sequence is read
 	 */
 	public static String readSmallTextFile(String file) throws IOException {
 		return readSmallTextFile(file, StandardCharsets.UTF_8);
@@ -94,7 +94,7 @@ public class FileOperations {
 	 *
 	 * @param file the path of the file
 	 * @return a String representing all the lines of the file
-	 * @throws IOException
+	 * @throws IOException if an I/O error occurs reading from the file or a malformed or unmappable byte sequence is read
 	 */
 	public static String readSmallTextFile(String file, Charset encoding) throws IOException {
 		List<String> l = readSmallTextFileToList(file, encoding);
@@ -115,7 +115,7 @@ public class FileOperations {
 	 * @param path the path of the file to read
 	 * @return the Properties object
 	 *
-	 * @throws IOException
+	 * @throws IOException if an error occurred when reading from the input stream.
 	 */
 	public static Properties readPropertiesFile(String path) throws IOException {
 		Properties p = new Properties();
@@ -131,7 +131,7 @@ public class FileOperations {
 	 * @param p    the properties to be written
 	 * @param path the path of the file to write
 	 *
-	 * @throws IOException
+	 * @throws IOException if writing this property list to the specified output stream throws an IOException
 	 */
 	public static void writePropertiesFile(Properties p, String path) throws IOException {
 		try (FileWriter fw = new FileWriter(path); BufferedWriter bw = new BufferedWriter(fw)) {
@@ -152,7 +152,7 @@ public class FileOperations {
 	 *
 	 * @param inputFile the path of the source file
 	 * @param outputFile the path of the destination file
-	 * @throws IOException
+	 * @throws IOException if an I/O error occurs when reading or writing
 	 */
 	public static void copyFile(String inputFile, String outputFile) throws IOException {
 		Path outputPath = Paths.get(outputFile);
@@ -167,7 +167,7 @@ public class FileOperations {
 	 * Creates a directory if it doesn't already exist
 	 *
 	 * @param dir the path of the directory to create
-	 * @throws IOException
+	 * @throws IOException if an I/O error occurs or the parent directory does not exist
 	 */
 	public static void createDirectory(String dir) throws IOException {
 		var dirPath = Paths.get(dir);
