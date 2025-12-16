@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 public class FileOperations {
 	private FileOperations() {
@@ -147,19 +148,6 @@ public class FileOperations {
 	//****************************
 
 	/**
-	 * Creates a directory if it doesn't already exist
-	 *
-	 * @param dir the path of the directory to create
-	 * @throws IOException
-	 */
-	public static void createDirectory(String dir) throws IOException {
-		var dirPath = Paths.get(dir);
-		if (!Files.exists(dirPath)) {
-			Files.createDirectory(dirPath);
-		}
-	}
-
-	/**
 	 * Copies a file from source to destination if the destination doesn't exist
 	 *
 	 * @param inputFile the path of the source file
@@ -175,12 +163,143 @@ public class FileOperations {
 		}
 	}
 
+	/**
+	 * Creates a directory if it doesn't already exist
+	 *
+	 * @param dir the path of the directory to create
+	 * @throws IOException
+	 */
+	public static void createDirectory(String dir) throws IOException {
+		var dirPath = Paths.get(dir);
+		if (!Files.exists(dirPath)) {
+			Files.createDirectory(dirPath);
+		}
+	}
+
+	/**
+	 * Creates a temporary directory in the specified directory with the given prefix.
+	 *
+	 * @param path the path to the directory in which to create the temporary directory
+	 * @param prefix the prefix string to be used in generating the directory's name
+	 * @return the path of the newly created temporary directory
+	 * @throws IOException if an I/O error occurs or the parent directory does not exist
+	 */
+	public static Path createTempDirectory(String path, String prefix) throws IOException {
+		return createTempDirectory(Paths.get(path), prefix);
+	}
+
+	/**
+	 * Creates a temporary directory in the specified directory with the given prefix.
+	 *
+	 * @param path the path to the directory in which to create the temporary directory
+	 * @param prefix the prefix string to be used in generating the directory's name
+	 * @return the path of the newly created temporary directory
+	 * @throws IOException if an I/O error occurs or the parent directory does not exist
+	 */
+	public static Path createTempDirectory(Path path, String prefix) throws IOException {
+		return Files.createTempDirectory(path, prefix);
+	}
+
+	/**
+	 * Creates a temporary directory in the specified directory with the given prefix,
+	 * returning the path as a String.
+	 *
+	 * @param path the path to the directory in which to create the temporary directory
+	 * @param prefix the prefix string to be used in generating the directory's name
+	 * @return the absolute path of the newly created temporary directory as a String
+	 * @throws IOException if an I/O error occurs or the parent directory does not exist
+	 */
+	public static String createTempDirectoryAsString(String path, String prefix) throws IOException {
+		return createTempDirectory(Paths.get(path), prefix).toString();
+	}
+
+	/**
+	 * Creates a temporary directory in the specified directory with the given prefix,
+	 * returning the path as a String.
+	 *
+	 * @param path the path to the directory in which to create the temporary directory
+	 * @param prefix the prefix string to be used in generating the directory's name
+	 * @return the absolute path of the newly created temporary directory as a String
+	 * @throws IOException if an I/O error occurs or the parent directory does not exist
+	 */
+	public static String createTempDirectoryAsString(Path path, String prefix) throws IOException {
+		return createTempDirectory(path, prefix).toString();
+	}
+
+
+	public static void deleteFile(String file) throws IOException {
+		deleteFile(Paths.get(file));
+	}
+
+	public static void deleteFile(File file) throws IOException {
+		deleteFile(file.toPath());
+	}
+
+	public static void deleteFile(Path file) throws IOException {
+		Files.delete(file);
+	}
+
+	public static void deleteFiles(String[] files) throws IOException {
+		for(String file : files) {
+			deleteFile(Paths.get(file));
+		}
+	}
+
+	public static void deleteFiles(File[] files) throws IOException {
+		for(File file : files) {
+			deleteFile(file.toPath());
+		}
+	}
+
+	public static void deleteFiles(List<File> files) throws IOException {
+		for(File file : files) {
+			deleteFile(file.toPath());
+		}
+	}
+
+	public static List<File> listFiles(String dir) throws IOException {
+		return listFiles(Paths.get(dir));
+	}
+
+	/**
+	 * Lists all files in the specified directory and its subdirectories recursively.
+	 * The returned list is sorted in natural order.
+	 *
+	 * @param dir the directory to search for files
+	 * @return a sorted list of all regular files found in the directory tree
+	 * @throws IOException if an I/O error occurs when accessing the directory
+	 */
+	public static List<File> listFiles(Path dir) throws IOException {
+		try (Stream<Path> stream = Files.walk(dir)){
+			return stream.filter(Files::isRegularFile)
+						 .map(Path::toFile)
+						 .sorted()
+						 .toList();
+		}
+	}
+
+	/**
+	 * Lists all files with the specified extension in the directory and its subdirectories recursively.
+	 * The returned list is sorted in natural order.
+	 *
+	 * @param dir the directory to search for files
+	 * @param extension the file extension to filter by (e.g., ".txt", ".java")
+	 * @return a sorted list of all regular files with the given extension found in the directory tree
+	 * @throws IOException if an I/O error occurs when accessing the directory
+	 */
+	public static List<File> listFilesByExtension(Path dir, String extension) throws IOException {
+		try (Stream<Path> stream = Files.walk(dir)){
+			return stream.filter(Files::isRegularFile)
+						 .filter(path -> path.getFileName().toString().endsWith(extension))
+						 .map(Path::toFile)
+						 .sorted()
+						 .toList();
+		}
+	}
+
 	// TODO
-	// deleteFile/deleteFiles
 	// deleteDir
+	// fileExists
 	// deleteDir&Files
-	// justStem
-	// createTempFile
-	// createTempDir
 
 }
