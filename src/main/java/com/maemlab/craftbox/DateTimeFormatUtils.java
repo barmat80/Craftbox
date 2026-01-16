@@ -1,18 +1,17 @@
 package com.maemlab.craftbox;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-public class DateTimeFormatUtils {
+public final class DateTimeFormatUtils {
 
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
     private static final DateTimeFormatter ITALIAN_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy").withLocale(Locale.ITALY);
     private static final DateTimeFormatter ITALIAN_DATETIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     private static final DateTimeFormatter UK_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd").withLocale(Locale.UK);
     private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter COMPACT = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
 
     private DateTimeFormatUtils() {}
 
@@ -218,5 +217,25 @@ public class DateTimeFormatUtils {
             throw new NullPointerException("localDate cannot be null");
         }
         return ITALIAN_DATE_FORMATTER.format(localDate);
+    }
+
+    /**
+     * Format now epoch to compact timestamp
+     *
+     * @return the formatted string
+     */
+     public static String getCompactTimestamp() {
+        return COMPACT.format(LocalDateTime.now());
+    }
+
+    /**
+     * Format a millisecond epoch to compact timestamp
+     *
+     * @param epochMillis the timestamp in milliseconds
+     * @return the formatted string
+     */
+    public static String getCompactTimestamp(long epochMillis) {
+        var dt = LocalDateTime.ofInstant(Instant.ofEpochMilli(epochMillis), ZoneId.systemDefault());
+        return COMPACT.format(dt);
     }
 }
