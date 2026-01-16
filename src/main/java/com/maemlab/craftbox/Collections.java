@@ -1,6 +1,6 @@
 package com.maemlab.craftbox;
 
-public class Collections {
+public final class Collections {
 
 	private Collections() {}
 

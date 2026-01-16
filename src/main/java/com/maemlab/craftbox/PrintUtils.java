@@ -3,7 +3,7 @@ package com.maemlab.craftbox;
 import java.util.Enumeration;
 import java.util.Properties;
 
-public class PrintUtils {
+public final class PrintUtils {
 
 	private PrintUtils() {
 	}

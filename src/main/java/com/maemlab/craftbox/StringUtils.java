@@ -1,6 +1,6 @@
 package com.maemlab.craftbox;
 
-public class StringUtils {
+public final class StringUtils {
 
 	private StringUtils() {}
 

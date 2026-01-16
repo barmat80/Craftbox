@@ -1,6 +1,6 @@
 package com.maemlab.craftbox;
 
-public class Validation {
+public final class Validation {
     private Validation() {}
 
     public static boolean isNumeric(String s) {
