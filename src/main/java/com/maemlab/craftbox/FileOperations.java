@@ -7,11 +7,12 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Stream;
 
-public class FileOperations {
+public final class FileOperations {
 	private FileOperations() {
 	}
 
@@ -139,9 +140,20 @@ public class FileOperations {
 		}
 	}
 
-//	public static JSONObject loadJson(String path) throws IOException {
+	//********************************
+	//*  JSON file operations  *
+	//********************************
+
+	//	public static JSONObject loadJson(String path) throws IOException {
 //		return new JSONObject(readSmallTextFile(path));
 //	}
+
+	public static void saveJsonStrToFile(Path path, String jsonStr) throws IOException {
+		if(path.getParent() != null) {
+			Files.createDirectories(path.getParent());
+		}
+		Files.writeString(path, jsonStr, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
+	}
 
 	//****************************
 	//*  File system operations  *
